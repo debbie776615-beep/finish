@@ -30,6 +30,16 @@ FONT_NAME = "NotoSansTC"
 FONT_PATH = os.path.join(BASE_DIR, "fonts", "NotoSansTC-Regular.ttf")
 
 if not os.path.exists(FONT_PATH):
+    # print 會進到 Streamlit Cloud 的後台 log（Manage app > Logs），
+    # 就算前台錯誤訊息被redacted擋掉，這裡的資訊還是看得到。
+    print(f"[字型除錯] BASE_DIR = {BASE_DIR}")
+    print(f"[字型除錯] 預期字型路徑 = {FONT_PATH}")
+    print(f"[字型除錯] BASE_DIR 底下實際有的檔案/資料夾: {os.listdir(BASE_DIR)}")
+    fonts_dir = os.path.join(BASE_DIR, "fonts")
+    if os.path.exists(fonts_dir):
+        print(f"[字型除錯] fonts 資料夾底下實際有的檔案: {os.listdir(fonts_dir)}")
+    else:
+        print("[字型除錯] fonts 資料夾根本不存在")
     raise FileNotFoundError(
         f"找不到字型檔：{FONT_PATH}\n"
         "請確認 fonts/NotoSansTC-Regular.ttf 有一起 commit 到 GitHub repo，"
