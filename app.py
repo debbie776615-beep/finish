@@ -16,16 +16,28 @@ from reportlab.platypus import (
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_LEFT
 
+# ---------- 路徑設定 ----------
+# 用 app.py 自己所在的資料夾組出絕對路徑，避免 Streamlit Cloud 執行時的
+# 工作目錄跟 app.py 所在資料夾不一致，導致相對路徑「fonts/...」「assets/...」找不到檔案。
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # ---------- 字型設定 ----------
 # 之前用的 reportlab 內建 CID 字型「MSung-Light」不會內嵌實際字型外框，
 # 只是指向 Adobe-CNS1 語言包，很多環境（Streamlit Cloud、瀏覽器內建PDF檢視器、
 # 手機等）沒有這個語言包就會整段中文顯示不出來或亂碼。
 # 改用內嵌的 Noto Sans TC TTF 字型，字型資料直接包進PDF，任何裝置都能正確顯示。
 FONT_NAME = "NotoSansTC"
-FONT_PATH = "fonts/NotoSansTC-Regular.ttf"
+FONT_PATH = os.path.join(BASE_DIR, "fonts", "NotoSansTC-Regular.ttf")
+
+if not os.path.exists(FONT_PATH):
+    raise FileNotFoundError(
+        f"找不到字型檔：{FONT_PATH}\n"
+        "請確認 fonts/NotoSansTC-Regular.ttf 有一起 commit 到 GitHub repo，"
+        "且路徑跟 app.py 是同一層（fonts 資料夾跟 app.py 平行放置）。"
+    )
 pdfmetrics.registerFont(TTFont(FONT_NAME, FONT_PATH))
 
-LOGO_PATH = "assets/logo.png"
+LOGO_PATH = os.path.join(BASE_DIR, "assets", "logo.png")
 
 
 def ad_to_minguo(d: date) -> str:
