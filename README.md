@@ -5,9 +5,14 @@
 your-repo/
 ├── app.py
 ├── requirements.txt
-└── assets/
-    └── logo.png      ← 公司LOGO放這裡（記得是 assets 資料夾內，不是根目錄）
+├── assets/
+│   └── logo.png              ← 公司LOGO放這裡（記得是 assets 資料夾內，不是根目錄）
+└── fonts/
+    └── NotoSansTC-Regular.ttf  ← 中文字型檔，一定要一起上傳，否則中文會顯示不出來
 ```
+
+⚠️ **`fonts/NotoSansTC-Regular.ttf` 這個檔案（約7MB）務必要 commit 進 repo**，
+不要因為檔案比較大就漏傳，少了它 PDF 裡的中文字會整段顯示不出來或亂碼。
 
 ## 部署到 Streamlit Community Cloud
 1. 把 `app.py`、`requirements.txt`、`assets/logo.png` 一起 push 到 GitHub repo
@@ -21,8 +26,13 @@ your-repo/
 - **簽名區**：客戶名稱會自動帶入，客戶聯絡人簽名／元盾資安主管簽名與日期維持空白，供列印後手寫簽名
 
 ## 字型
-中文字型用 reportlab 內建的 `MSung-Light`（繁體中文 Big5 CID 字型），
-不需要額外上傳 .ttf 字型檔到 repo，這點跟報價單那支程式不太一樣，可以省掉字型檔案處理的麻煩。
+改用內嵌的 **Noto Sans TC**（Google開源繁體中文字型，`fonts/NotoSansTC-Regular.ttf`）。
+
+原本想用 reportlab 內建的 `MSung-Light`（號稱不用另外傳字型檔），
+但實測發現它其實不含真正的字型外框，只是指向系統的 Adobe-CNS1 語言包，
+在 Streamlit Cloud、多數瀏覽器內建PDF檢視器上都會找不到而整段中文顯示不出來或亂碼。
+所以改成內嵌真正的 TTF 字型檔，字型資料直接包進產生出來的PDF裡，不依賴對方裝置裝了什麼字型，
+這樣才能保證任何人打開都正常顯示。
 
 ## 之後可以再調整的方向（先列出來，需要再說）
 - LOGO 大小/位置微調
