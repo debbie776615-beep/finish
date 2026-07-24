@@ -9,16 +9,21 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
 from reportlab.lib import colors
 from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.cidfonts import UnicodeCIDFont
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (
     SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
 )
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_LEFT
 
-# ---------- 字型設定（繁體中文，reportlab 內建，不需另外上傳字型檔） ----------
-FONT_NAME = "MSung-Light"
-pdfmetrics.registerFont(UnicodeCIDFont(FONT_NAME))
+# ---------- 字型設定 ----------
+# 之前用的 reportlab 內建 CID 字型「MSung-Light」不會內嵌實際字型外框，
+# 只是指向 Adobe-CNS1 語言包，很多環境（Streamlit Cloud、瀏覽器內建PDF檢視器、
+# 手機等）沒有這個語言包就會整段中文顯示不出來或亂碼。
+# 改用內嵌的 Noto Sans TC TTF 字型，字型資料直接包進PDF，任何裝置都能正確顯示。
+FONT_NAME = "NotoSansTC"
+FONT_PATH = "fonts/NotoSansTC-Regular.ttf"
+pdfmetrics.registerFont(TTFont(FONT_NAME, FONT_PATH))
 
 LOGO_PATH = "assets/logo.png"
 
